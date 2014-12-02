@@ -5,10 +5,15 @@ public class Player : MonoBehaviour {
 
 	public float velocidade;
 	public float forcaPulo;
+	public Transform chaoVerificador;
+	private bool estaNoChao;
+
+	public Transform spritePlayer;
+	private Animator animator;
 
 	// Use this for initialization
 	void Start () {
-	
+		animator = spritePlayer.GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
@@ -27,8 +32,12 @@ public class Player : MonoBehaviour {
 			transform.eulerAngles = new Vector2(0, 180);
 		}
 
-		if (Input.GetButtonDown ("Jump")) {
+		if (Input.GetButtonDown ("Jump") && estaNoChao) {
 			rigidbody2D.AddForce(transform.up * forcaPulo);		
 		}
+
+		estaNoChao = Physics2D.Linecast (transform.position, chaoVerificador.position, 1 << LayerMask.NameToLayer ("Piso"));
+		animator.SetFloat("movimento", Mathf.Abs (Input.GetAxisRaw ("Horizontal")));
+		animator.SetBool("chao", estaNoChao);
 	}
 }
