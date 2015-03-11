@@ -24,7 +24,9 @@ public class Fireball : MonoBehaviour {
 
 	void OnCollisionEnter2D (Collision2D colisor) {
 		if (colisor.gameObject.tag == "Player") {
-			player.position = new Vector3(0, 0, 0);
+			var player = colisor.gameObject.GetComponent<Player>();
+			player.PerdeVida(10);
 		}
+		Destroy (gameObject);
 	}
 }

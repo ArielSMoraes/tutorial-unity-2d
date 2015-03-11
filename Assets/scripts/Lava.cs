@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Lava : MonoBehaviour {
+	private Transform player;
 
 	// Use this for initialization
 	void Start () {
@@ -12,9 +13,10 @@ public class Lava : MonoBehaviour {
 	
 	}
 
-	void OnTriggerEnter2D (Collider2D colisor) {
+	void OnTriggerEnter2D(Collider2D colisor) {
 		if (colisor.gameObject.tag == "Player") {
-			Application.LoadLevel(Application.loadedLevel);
+			var player = colisor.gameObject.GetComponent<Player>();
+			player.PerdeVida(player.maxVida);
 		}
 	}
 }

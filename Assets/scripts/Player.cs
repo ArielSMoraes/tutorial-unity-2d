@@ -11,9 +11,19 @@ public class Player : MonoBehaviour {
 	public Transform spritePlayer;
 	private Animator animator;
 
+	public GameObject vida;
+	public int maxVida;
+	private int vidaAtual;
+
+
 	// Use this for initialization
 	void Start () {
 		animator = spritePlayer.GetComponent<Animator> ();
+
+		//Vida
+		vidaAtual = maxVida;
+		vida.guiText.color = new Vector4(0.25f, 0.5f, 0.25f, 1f);
+		vida.guiText.text = "HP: " + vidaAtual + "/" + maxVida;
 	}
 	
 	// Update is called once per frame
@@ -39,5 +49,33 @@ public class Player : MonoBehaviour {
 		estaNoChao = Physics2D.Linecast (transform.position, chaoVerificador.position, 1 << LayerMask.NameToLayer ("Piso"));
 		animator.SetFloat("movimento", Mathf.Abs (Input.GetAxisRaw ("Horizontal")));
 		animator.SetBool("chao", estaNoChao);
+	}
+
+	public void PerdeVida(int dano) {
+		vidaAtual -= dano;
+		
+		if (vidaAtual <= 0) {
+			Application.LoadLevel(Application.loadedLevel);
+		}
+		
+		if ((vidaAtual * 100 / maxVida) < 30) {
+			vida.guiText.color = Color.red;
+		}
+		
+		vida.guiText.text = "HP: " + vidaAtual + "/" + maxVida;
+	}
+
+	public void RecuperaVida(int recupera) {
+		vidaAtual += recupera;
+		
+		if (vidaAtual > maxVida) {
+			vidaAtual = maxVida;
+		}
+		
+		if ((vidaAtual * 100 / maxVida) >= 30) {
+			vida.guiText.color = new Vector4(0.25f, 0.5f, 0.25f, 1f);
+		}
+		
+		vida.guiText.text = "HP: " + vidaAtual + "/" + maxVida;
 	}
 }
